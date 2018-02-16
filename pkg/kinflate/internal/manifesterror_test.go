@@ -14,16 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package util
+package internal
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
-// First pass to encapsulate fields for more informative error messages.
-type ManifestError struct {
-	ManifestFilepath string
-	ErrorMsg         string
-}
-
-func (me ManifestError) Error() string {
-	return fmt.Sprintf("Manifest File [%s]: %s\n", me.ManifestFilepath, me.ErrorMsg)
+func TestManifestError_Error(t *testing.T) {
+	filepath := "/path/to/Kube-manifest.yaml"
+	errorMsg := "Manifest not found"
+	expectedErrorMsg := fmt.Sprintf("Manifest File [%s]: %s\n", filepath, errorMsg)
+	me := ManifestError{ManifestFilepath: filepath, ErrorMsg: errorMsg}
+	if me.Error() != expectedErrorMsg {
+		t.Errorf("Incorrect ManifestError.Error() message\n")
+		t.Errorf("  Expected: %s\n", expectedErrorMsg)
+		t.Errorf("  Got: %s\n", me.Error())
+	}
 }
